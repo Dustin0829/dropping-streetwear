@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { useCart } from "@/hooks/use-cart"
 import { X } from "lucide-react"
+import Image from "next/image"
+import { useToast } from "@/hooks/use-toast"
 
 interface Product {
   id: string
@@ -18,8 +20,18 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
   const [selectedSize, setSelectedSize] = useState(product.sizes[0])
   const [quantity, setQuantity] = useState(1)
   const { addItem } = useCart()
+  const { toast } = useToast()
 
   const handleAddToCart = () => {
+    if (!selectedColor || !selectedSize) {
+      toast({
+        title: "Please select options",
+        description: "Please select both color and size before adding to cart.",
+        variant: "destructive",
+      })
+      return
+    }
+
     addItem({
       id: `${product.id}-${selectedColor}-${selectedSize}`,
       name: product.name,
@@ -29,17 +41,51 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
       color: selectedColor,
       size: selectedSize,
     })
+    
+    toast({
+      title: "Added to cart!",
+      description: `${product.name} (${selectedColor}, ${selectedSize}) has been added to your cart.`,
+    })
+    
     onClose()
+  }
+
+  const getColorSwatch = (color: string) => {
+    const colorMap: { [key: string]: string } = {
+      'Black': '#000000',
+      'Brown': '#8B4513',
+      'Green': '#228B22',
+      'White': '#FFFFFF',
+      'Gray': '#808080',
+    }
+    return colorMap[color] || '#000000'
   }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-card rounded-lg max-w-md w-full p-6 relative">
+      <div className="bg-card rounded-lg max-w-4xl w-full p-6 relative">
         <button onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
           <X className="w-6 h-6" />
         </button>
 
-        <h2 className="text-2xl font-bold mb-6">{product.name}</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left Side - Product Preview */}
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
+            <div className="relative h-96 w-full bg-card rounded-lg overflow-hidden">
+              <Image
+                src={product.image || "/placeholder.svg"}
+                alt={product.name}
+                fill
+                unoptimized
+                className="object-cover"
+              />
+            </div>
+            <p className="text-2xl font-bold">₱{product.price}</p>
+          </div>
+          
+          {/* Right Side - Options */}
+          <div className="space-y-6">
 
         {/* Color Selection */}
         <div className="mb-6">
@@ -49,14 +95,14 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
               <button
                 key={color}
                 onClick={() => setSelectedColor(color)}
-                className={`px-4 py-2 border transition ${
+                className={`w-12 h-12 rounded-full border-2 transition-all ${
                   selectedColor === color
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border hover:border-foreground"
+                    ? "border-primary scale-110"
+                    : "border-border hover:border-foreground hover:scale-105"
                 }`}
-              >
-                {color}
-              </button>
+                style={{ backgroundColor: getColorSwatch(color) }}
+                title={color}
+              />
             ))}
           </div>
         </div>
@@ -101,25 +147,35 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
           </div>
         </div>
 
-        {/* Price */}
-        <div className="mb-6 pb-6 border-b border-border">
-          <p className="text-lg font-semibold">${(product.price * quantity).toFixed(2)}</p>
-        </div>
+            {/* Total Price */}
+            <div className="pb-6 border-b border-border">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Total</span>
+                <p className="text-xl font-bold">₱{(product.price * quantity).toFixed(2)}</p>
+              </div>
+            </div>
 
-        {/* Actions */}
-        <div className="flex gap-3">
-          <button
-            onClick={onClose}
-            className="flex-1 py-3 border border-border hover:bg-muted transition font-semibold"
-          >
-            CANCEL
-          </button>
-          <button
-            onClick={handleAddToCart}
-            className="flex-1 py-3 bg-primary text-primary-foreground font-semibold hover:opacity-90 transition"
-          >
-            ADD TO CART
-          </button>
+            {/* Actions */}
+            <div className="flex gap-3">
+              <button
+                onClick={onClose}
+                className="flex-1 py-3 border border-border hover:bg-muted transition font-semibold"
+              >
+                CANCEL
+              </button>
+              <button
+                onClick={handleAddToCart}
+                className={`flex-1 py-3 font-semibold transition ${
+                  !selectedColor || !selectedSize
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-primary text-primary-foreground hover:opacity-90"
+                }`}
+                disabled={!selectedColor || !selectedSize}
+              >
+                ADD TO CART
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

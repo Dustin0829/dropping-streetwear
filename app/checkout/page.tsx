@@ -7,9 +7,11 @@ import { Footer } from "@/components/footer"
 import { useCart } from "@/hooks/use-cart"
 import { useState } from "react"
 import Link from "next/link"
+import { useToast } from "@/hooks/use-toast"
 
 export default function CheckoutPage() {
   const { items, getTotal, clearCart } = useCart()
+  const { toast } = useToast()
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -34,6 +36,12 @@ export default function CheckoutPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    toast({
+      title: "Order placed successfully!",
+      description: `Your order of ₱${(getTotal() * 1.1).toFixed(2)} has been confirmed.`,
+    })
+    
     setOrderPlaced(true)
     clearCart()
   }
@@ -222,7 +230,7 @@ export default function CheckoutPage() {
                     <span className="text-muted-foreground">
                       {item.name} x {item.quantity}
                     </span>
-                    <span>${(item.price * item.quantity).toFixed(2)}</span>
+                    <span>₱{(item.price * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}
               </div>
@@ -230,7 +238,7 @@ export default function CheckoutPage() {
               <div className="space-y-3 mb-6 pb-6 border-b border-border">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${getTotal().toFixed(2)}</span>
+                  <span>₱{getTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
@@ -238,13 +246,13 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Tax</span>
-                  <span>${(getTotal() * 0.1).toFixed(2)}</span>
+                  <span>₱{(getTotal() * 0.1).toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="flex justify-between text-lg font-bold">
                 <span>Total</span>
-                <span>${(getTotal() * 1.1).toFixed(2)}</span>
+                <span>₱{(getTotal() * 1.1).toFixed(2)}</span>
               </div>
             </div>
           </div>

@@ -6,9 +6,27 @@ import { useCart } from "@/hooks/use-cart"
 import Image from "next/image"
 import Link from "next/link"
 import { Trash2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, getTotal } = useCart()
+  const { toast } = useToast()
+
+  const handleRemoveItem = (itemId: string, itemName: string) => {
+    removeItem(itemId)
+    toast({
+      title: "Item removed",
+      description: `${itemName} has been removed from your cart.`,
+    })
+  }
+
+  const handleUpdateQuantity = (itemId: string, newQuantity: number, itemName: string) => {
+    updateQuantity(itemId, newQuantity)
+    toast({
+      title: "Quantity updated",
+      description: `${itemName} quantity updated to ${newQuantity}.`,
+    })
+  }
 
   if (items.length === 0) {
     return (
@@ -65,14 +83,14 @@ export default function CartPage() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => handleUpdateQuantity(item.id, item.quantity - 1, item.name)}
                             className="px-3 py-1 border border-border hover:bg-muted transition"
                           >
                             −
                           </button>
                           <span className="w-8 text-center">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => handleUpdateQuantity(item.id, item.quantity + 1, item.name)}
                             className="px-3 py-1 border border-border hover:bg-muted transition"
                           >
                             +
@@ -80,9 +98,9 @@ export default function CartPage() {
                         </div>
 
                         <div className="text-right">
-                          <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                          <p className="font-semibold">₱{(item.price * item.quantity).toFixed(2)}</p>
                           <button
-                            onClick={() => removeItem(item.id)}
+                            onClick={() => handleRemoveItem(item.id, item.name)}
                             className="text-destructive hover:text-destructive/80 transition mt-2"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -102,7 +120,7 @@ export default function CartPage() {
               <div className="space-y-4 mb-6 pb-6 border-b border-border">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${getTotal().toFixed(2)}</span>
+                  <span>₱{getTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
@@ -110,13 +128,13 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Tax</span>
-                  <span>${(getTotal() * 0.1).toFixed(2)}</span>
+                  <span>₱{(getTotal() * 0.1).toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="flex justify-between text-lg font-bold mb-6">
                 <span>Total</span>
-                <span>${(getTotal() * 1.1).toFixed(2)}</span>
+                <span>₱{(getTotal() * 1.1).toFixed(2)}</span>
               </div>
 
               <Link

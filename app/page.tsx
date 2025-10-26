@@ -7,25 +7,25 @@ export default function Home() {
   const models = [
     {
       id: 1,
-      image: "/streetwear-model-showcase.jpg",
-      title: "Model Showcase",
-      description: "SLOW GRIND Collection",
+      image: "/black-tee.jpg",
+      title: "SLOW GRIND Collection",
+      description: "Premium streetwear in action",
     },
     {
       id: 2,
-      image: "/signature-caps-collection.jpg",
+      image: "/all-caps.jpg",
       title: "Signature Caps",
       description: "Available in Multiple Colors",
     },
     {
       id: 3,
-      image: "/premium-tees-streetwear.jpg",
+      image: "/shirt.jpg",
       title: "Premium Tees",
-      description: "Comfort Meets Style",
+      description: "SLOW GRIND - Comfort Meets Style",
     },
     {
       id: 4,
-      image: "/hoodie-collection-colors.jpg",
+      image: "/4-colors-hoodie.jpg",
       title: "Hoodie Collection",
       description: "Four Colorways Available",
     },
@@ -38,7 +38,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto text-center mb-20">
-          <h1 className="text-6xl md:text-7xl font-bold tracking-tighter mb-6 text-balance">DROPPING STREETWEAR</h1>
+          <h1 className="text-6xl md:text-7xl font-bold tracking-tighter mb-6 text-balance italic">DROPPING STREETWEAR</h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Premium streetwear for those who move at their own pace. Slow grind, big dreams.
           </p>
@@ -70,6 +70,33 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Manifesto Section */}
+      <section className="py-20 px-4 bg-card">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold mb-12 text-center italic">THE STREETWEAR MANIFESTO</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <h3 className="text-2xl font-bold mb-4 text-white">GRIND</h3>
+              <p className="text-muted-foreground">
+                Slow and steady wins the race. Every day we grind, every drop we deliver quality that reflects the hustle behind the brand.
+              </p>
+            </div>
+            <div className="text-center">
+              <h3 className="text-2xl font-bold mb-4 text-white">AUTHENTICITY</h3>
+              <p className="text-muted-foreground">
+                Real culture, real designs. We stay true to the streets and create pieces that speak to those who live the lifestyle, not just wear the clothes.
+              </p>
+            </div>
+            <div className="text-center">
+              <h3 className="text-2xl font-bold mb-4 text-white">ELEVATE</h3>
+              <p className="text-muted-foreground">
+                Rising from the pavement to reach new heights. We're building a community of dreamers and doers, one drop at a time.
+              </p>
+            </div>
           </div>
         </div>
       </section>

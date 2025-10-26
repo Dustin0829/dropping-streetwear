@@ -30,7 +30,7 @@ export function ProductCard({ product }: { product: Product }) {
           />
         </div>
         <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
-        <p className="text-muted-foreground text-sm mb-4">${product.price}</p>
+        <p className="text-muted-foreground text-sm mb-4">₱{product.price}</p>
         <button
           onClick={() => setShowModal(true)}
           className="w-full bg-primary text-primary-foreground py-2 font-semibold hover:opacity-90 transition"
