@@ -62,17 +62,17 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-card rounded-lg max-w-4xl w-full p-6 relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-card rounded-lg max-w-4xl w-full p-6 relative my-4 max-h-[95vh] overflow-y-auto">
+        <button onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground z-10">
           <X className="w-6 h-6" />
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Side - Product Preview */}
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
-            <div className="relative h-96 w-full bg-card rounded-lg overflow-hidden">
+            <h2 className="text-2xl lg:text-3xl font-bold mb-4">{product.name}</h2>
+            <div className="relative h-64 lg:h-96 w-full bg-card rounded-lg overflow-hidden">
               <Image
                 src={product.image || "/placeholder.svg"}
                 alt={product.name}
@@ -81,7 +81,7 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
                 className="object-cover"
               />
             </div>
-            <p className="text-2xl font-bold">₱{product.price}</p>
+            <p className="text-xl lg:text-2xl font-bold">₱{product.price}</p>
           </div>
           
           {/* Right Side - Options */}
